@@ -1,8 +1,73 @@
-const cards = document.querySelectorAll('.memory-card')
-
+const moves = document.getElementById('moves-count');
+const timeValue = document.getElementById('time');
+const startButton = document.getElementById('start');
+const stopButton = document.getElementById('stop');
+const playAgainButton = document.getElementById('play-again');
+const gameContainer = document.querySelector('.memory-game');
+const result = document.getElementById('result');
+const controls = document.querySelector('.controls-container')
+let cards;
+let interval;
 let hasFlippedCard = false;
 let lockBoard = false;
 let firstCard, secondCard;
+
+// Initial time
+let seconds = 0,
+    minutes = 0;
+// Initial moves and win count
+let movesCount = 0,
+    winCount = 0;
+
+// Timer
+const timeGenerator = () => {
+    seconds += 1;
+    // minutes logic
+    if (seconds >= 60) {
+        minutes += 1;
+        seconds = 0;
+    }
+    // format time before displaying
+    let secondsValue = seconds < 10 ? `0${seconds}` : seconds;
+    let minutesValue = minutes < 10 ? `0${minutes}` : minutes;
+    timeValue.innerHTML = `<span>Time: </span>${minutesValue}:${secondsValue}`;
+};
+
+// Calculating moves
+const movesCounter = () => {
+    movesCount += 1;
+    moves.innerHTML = `<span>Moves: </span>${movesCount}`;
+};
+
+// Cards array
+const groups = [
+    { name: 'blackpink', image: 'img/blackpink.jpeg' },
+    { name: 'bts', image: 'img/bts.jpg' },
+    { name: 'ikon', image: 'img/ikon.jpeg' },
+    { name: 'newjeans', image: 'img/newjeans.jpeg' },
+    { name: 'redvelvet', image: 'img/redvelvet.webp' },
+    { name: 'sf9', image: 'img/sf9.webp' },
+    { name: 'twice', image: 'img/twice.png' },
+    { name: 'winner', image: 'img/winner.webp' },
+];
+
+// Randomly pick groups for the game board
+const generateRandom = (size = 4) => {
+    //temporary array
+    let tempArray = [...groups];
+    //initializes cardValues array
+    let cardValues = [];
+    //size should be double (4*4 matrix)/2 since pairs of objects would exist
+    size = (size * size) / 2;
+    //Random object selection
+    for (let i = 0; i < size; i++) {
+        const randomIndex = Math.floor(Math.random() * tempArray.length);
+        cardValues.push(tempArray[randomIndex]);
+        //once selected remove the object from temp array
+        tempArray.splice(randomIndex, 1);
+    }
+    return cardValues;
+};
 
 function flipCard() {
     if (lockBoard) return;
@@ -21,6 +86,8 @@ function flipCard() {
     // second click
     secondCard = this;
 
+    movesCounter();
+
     checkForMatch();
 }
 
@@ -33,6 +100,14 @@ function checkForMatch() {
 function disableCards() {
     firstCard.removeEventListener('click', flipCard);
     secondCard.removeEventListener('click', flipCard);
+
+    winCount += 1;
+    // check if player won
+    if (winCount == Math.floor(cardValues.length / 2)) {
+        result.innerHTML = `<h2>You won!</h2>
+        <p><h4>Moves: ${movesCount}</h4></p>`;
+        stopGame();
+    }
 
     resetBoard();
 }
@@ -53,11 +128,83 @@ function resetBoard() {
     [firstCard, secondCard] = [null, null];
 }
 
-(function shuffle() {
-    cards.forEach(card => {
-        let randomPos = Math.floor(Math.random() * 16);
-        card.style.order = randomPos;
-    });
-})();
+// Generate game board matrix
+const matrixGenerator = (cardValues, size = 4) => {
+    gameContainer.innerHTML = '';
+    cardValues = [...cardValues, ...cardValues];
+    //simple shuffle
+    cardValues.sort(() => Math.random() - 0.5);
+    for (let i = 0; i < size * size; i++) {
+        /*
+        Create Cards
+        before => front side (contains question mark)
+        after => back side (contains actual image);
+        data-card-values is a custom attribute which stores the names of the cards to match later
+        */
+        gameContainer.innerHTML += `
+        <div class="memory-card" data-group="${cardValues[i].name}">
+            <img src="${cardValues[i].image}" class="front-face">
+            <img src="img/backface.png" class="back-face">
+        </div>
+        `;
+    }
+    //Grid
+    gameContainer.style.gridTemplateColumns = `repeat(${size},auto)`;
 
-cards.forEach(card => card.addEventListener('click', flipCard))
+    // Cards
+    cards = document.querySelectorAll('.memory-card');
+    cards.forEach(card => card.addEventListener('click', flipCard));
+}
+
+// Start game
+startButton.addEventListener('click', () => {
+    movesCount = 0;
+    seconds = 0;
+    minutes = 0;
+    // controls and buttons visibility
+    controls.classList.add('hide');
+    stopButton.classList.remove('hide');
+    startButton.classList.add('hide');
+    // Start time
+    interval = setInterval(timeGenerator, 1000);
+    // initial moves
+    moves.innerHTML = `<span>Moves: </span>${movesCount}`;
+    initializer();
+});
+
+// Play again
+playAgainButton.addEventListener('click', () => {
+    movesCount = 0;
+    seconds = 0;
+    minutes = 0;
+    // controls and buttons visibility
+    controls.classList.add('hide');
+    stopButton.classList.remove('hide');
+    startButton.classList.add('hide');
+    playAgainButton.classList.add('hide');
+    // Start time
+    interval = setInterval(timeGenerator, 1000);
+    // initial moves
+    moves.innerHTML = `<span>Moves: </span>${movesCount}`;
+    initializer();
+});
+
+// Stop game
+stopButton.addEventListener(
+    'click',
+    (stopGame = () => {
+        controls.classList.remove('hide');
+        stopButton.classList.add('hide');
+        startButton.classList.remove('hide');
+        clearInterval(interval);
+    })
+);
+
+// Initialize values and function calls
+const initializer = () => {
+    result.innerText = '';
+    winCount = 0;
+    let cardValues = generateRandom();
+    console.log(cardValues);
+    matrixGenerator(cardValues);
+};
