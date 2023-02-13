@@ -1,0 +1,18 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    background: lavender;
+}
+
+.memory-card {
+    border: 2px solid
+}
+
+img {
+    width: 100px;
+}
