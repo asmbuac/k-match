@@ -106,7 +106,7 @@ button {
 }
 
 
-#stop {
+#restart {
     font-size: 1.1em;
     display: block;
     margin: 1.1em auto 0 auto;
@@ -115,7 +115,7 @@ button {
 }
 
 button:hover,
-button#stop:hover {
+button#restart:hover {
     background-color: rgb(180, 180, 220);
 }
 

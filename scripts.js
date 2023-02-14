@@ -1,8 +1,8 @@
 const moves = document.getElementById('moves-count');
 const timeValue = document.getElementById('time');
 const startButton = document.getElementById('start');
-const stopButton = document.getElementById('stop');
 const playAgainButton = document.getElementById('play-again');
+const restartButton = document.getElementById('restart');
 const gameContainer = document.querySelector('.memory-game');
 const result = document.getElementById('result');
 const controls = document.querySelector('.controls-container')
@@ -101,15 +101,9 @@ function disableCards() {
     firstCard.removeEventListener('click', flipCard);
     secondCard.removeEventListener('click', flipCard);
 
-    winCount += 1;
-    // check if player won
-    if (winCount == Math.floor(cardValues.length / 2)) {
-        result.innerHTML = `<h2>You won!</h2>
-        <p><h4>Moves: ${movesCount}</h4></p>`;
-        stopGame();
-    }
-
     resetBoard();
+
+    checkWin();
 }
 
 function unflipCards(){
@@ -120,12 +114,29 @@ function unflipCards(){
         secondCard.classList.remove('flip');
 
         resetBoard();
-    }, 1500);
+    }, 1000);
 }
 
 function resetBoard() {
     [hasFlippedCard, lockBoard] = [false, false];
     [firstCard, secondCard] = [null, null];
+}
+
+function checkWin() {
+    winCount += 1;
+    // check if player won
+    if (winCount == Math.floor(8)) {
+        result.innerHTML = `<h2>You won!</h2>
+        <h4>Moves: ${movesCount}</h4>`;
+        stopGame();
+    }
+}
+
+// Stop game
+function stopGame() {
+    controls.classList.remove('hide');
+    playAgainButton.classList.remove('hide');
+    clearInterval(interval);
 }
 
 // Generate game board matrix
@@ -135,12 +146,7 @@ const matrixGenerator = (cardValues, size = 4) => {
     //simple shuffle
     cardValues.sort(() => Math.random() - 0.5);
     for (let i = 0; i < size * size; i++) {
-        /*
-        Create Cards
-        before => front side (contains question mark)
-        after => back side (contains actual image);
-        data-card-values is a custom attribute which stores the names of the cards to match later
-        */
+        // Create cards
         gameContainer.innerHTML += `
         <div class="memory-card" data-group="${cardValues[i].name}">
             <img src="${cardValues[i].image}" class="front-face">
@@ -163,7 +169,7 @@ startButton.addEventListener('click', () => {
     minutes = 0;
     // controls and buttons visibility
     controls.classList.add('hide');
-    stopButton.classList.remove('hide');
+    restartButton.classList.remove('hide');
     startButton.classList.add('hide');
     // Start time
     interval = setInterval(timeGenerator, 1000);
@@ -173,38 +179,32 @@ startButton.addEventListener('click', () => {
 });
 
 // Play again
-playAgainButton.addEventListener('click', () => {
+playAgainButton.addEventListener( 'click', () => {
     movesCount = 0;
     seconds = 0;
     minutes = 0;
-    // controls and buttons visibility
     controls.classList.add('hide');
-    stopButton.classList.remove('hide');
-    startButton.classList.add('hide');
+    restartButton.classList.remove('hide');
     playAgainButton.classList.add('hide');
-    // Start time
     interval = setInterval(timeGenerator, 1000);
-    // initial moves
     moves.innerHTML = `<span>Moves: </span>${movesCount}`;
     initializer();
 });
 
-// Stop game
-stopButton.addEventListener(
-    'click',
-    (stopGame = () => {
-        controls.classList.remove('hide');
-        stopButton.classList.add('hide');
-        startButton.classList.remove('hide');
-        clearInterval(interval);
-    })
-);
+// Restart game
+restartButton.addEventListener('click', () => {
+    movesCount = 0;
+    seconds = 0;
+    minutes = 0;
+    interval = setInterval(timeGenerator, 1000);
+    moves.innerHTML = `<span>Moves: </span>${movesCount}`;
+    initializer();
+});
 
 // Initialize values and function calls
 const initializer = () => {
     result.innerText = '';
     winCount = 0;
     let cardValues = generateRandom();
-    console.log(cardValues);
     matrixGenerator(cardValues);
 };
