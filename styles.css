@@ -34,8 +34,20 @@ body {
 }
 
 .stats-container {
-    text-align: right;
-    margin-bottom: 1.2em;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    margin-top: .5em;
+    margin-bottom: 1.1em;
+}
+
+.stats-container #moves-count {
+    text-align: start;
+    margin-left: 5px;
+}
+
+.stats-container #time {
+    text-align: end;
+    margin-right: 5px;
 }
 
 .stats-container span {
@@ -98,25 +110,29 @@ body {
     top: 0;
 }
 
-button {
+button#start,
+button#play-again {
     border: none;
     border-radius: 0.3em;
     padding: 1em 1.5em;
     cursor: pointer;
 }
 
-
 #restart {
-    font-size: 1.1em;
+    border: none;
+    border-radius: 0.3em;
+    padding: .6em 1em;
+    cursor: pointer;
     display: block;
+    font-size: 1.1em;
     margin: 1.1em auto 0 auto;
-    background-color: black;
+    background-color: #B265BA;
     color: white;
 }
 
 button:hover,
 button#restart:hover {
-    background-color: rgb(180, 180, 220);
+    background-color: #E8C7FF;
 }
 
 .controls-container button {
