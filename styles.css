@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Luckiest+Guy&family=Poppins:wght@400;600&family=Spicy+Rice&display=swap');
 
 * {
     padding: 0;
@@ -85,10 +85,16 @@ body {
     border-radius: 5px;
     background-color:rgb(180, 180, 220);
     backface-visibility: hidden;
+    transition: 0.3s;
 }
 
 .front-face {
     transform: rotateY(180deg);
+}
+
+.back-face:hover {
+    background-color: rgb(136, 136, 216);
+    transition: 0.3s;
 }
 
 @media (max-width: 700px) {
@@ -96,6 +102,25 @@ body {
         width: 100%;
         justify-content: center;
     }
+}
+
+div.restart-pause-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6em;
+}
+
+div.restart-pause-container button#restart {
+    margin-left: auto;
+    margin-right: 0;
+    transition: 0.3s;
+}
+
+div.restart-pause-container button#pause,
+button#play {
+    margin-right: auto;
+    margin-left: 0;
+    transition: 0.3s;
 }
 
 .controls-container {
@@ -116,6 +141,16 @@ button#play-again {
     border-radius: 0.3em;
     padding: 1em 1.5em;
     cursor: pointer;
+    font-size: 1.1em;
+    box-shadow: 0 0.6em 2em rgba(43, 0, 86, 0.2);
+    color: rgb(136, 136, 216);
+    transition: 0.3s;
+}
+
+button#start:hover,
+button#play-again:hover {
+    background-color:rgba(43, 0, 86, 0.4);
+    color: white;
 }
 
 #restart {
@@ -123,21 +158,31 @@ button#play-again {
     border-radius: 0.3em;
     padding: .6em 1em;
     cursor: pointer;
-    display: block;
+    display: flexbox;
     font-size: 1.1em;
     margin: 1.1em auto 0 auto;
     background-color: #B265BA;
     color: white;
 }
 
-button:hover,
-button#restart:hover {
-    background-color: #E8C7FF;
+#pause,
+#play {
+    border: none;
+    border-radius: 0.3em;
+    padding: .6em 1.2em;
+    cursor: pointer;
+    display: flexbox;
+    font-size: 1.1em;
+    margin: 1.1em auto 0 auto;
+    color: #B265BA;
 }
 
-.controls-container button {
-    font-size: 1.1em;
-    box-shadow: 0 0.6em 2em rgba(43, 0, 86, 0.2);
+button#restart:hover,
+button#pause:hover,
+button#play:hover {
+    background-color: #E8C7FF;
+    color: #B265BA;
+    transition: 0.3s;
 }
 
 .hide {
@@ -146,13 +191,33 @@ button#restart:hover {
 
 #result {
     text-align: center;
+    color: white;
 }
 
 #result h2 {
-    font-size: 2.5em;
+    font-family: "Fascinate Inline";
+    font-size: 5em;
+    text-shadow: 0 2px 8px rgb(43 0 86 / 50%);
 }
 
 #result h4 {
     font-size: 1.8em;
     margin: 0.6em 0 1em 0;
+}
+
+#instructions {
+    color: white;
+    text-align: center;
+}
+
+#instructions h1 {
+    font-family: "Fascinate Inline";
+    font-size: 7em;
+    text-shadow: 0 2px 8px rgb(43 0 86 / 50%);
+    margin-top: 0px;
+}
+
+#instructions h4 {
+    font-size: 1.8em;
+    margin: 0.6em 4em 1em;
 }
