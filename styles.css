@@ -219,5 +219,6 @@ button#play:hover {
 
 #instructions h4 {
     font-size: 1.8em;
-    margin: 0.6em 4em 1em;
+    margin: 0.6em 1em;
+    width: 700px;
 }

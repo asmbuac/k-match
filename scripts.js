@@ -207,7 +207,11 @@ restartButton.addEventListener('click', () => {
     movesCount = 0;
     seconds = 0;
     minutes = 0;
+    resetBoard();
+    clearInterval(interval);
     interval = setInterval(timeGenerator, 1000);
+    playButton.classList.add('hide');
+    pauseButton.classList.remove('hide');
     moves.innerHTML = `<span>Moves: </span>${movesCount}`;
     initializer();
 });
@@ -222,6 +226,7 @@ pauseButton.addEventListener('click', () => {
 
 // Play after pause
 playButton.addEventListener('click', () => {
+    clearInterval(interval);
     interval = setInterval(timeGenerator, 1000);
     lockBoard = false;
     playButton.classList.add('hide');
