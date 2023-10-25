@@ -4,4 +4,4 @@ K-Match is a K-pop matching card game where users try to match all the cards as 
 
 ## Demo
 
-![Game demo](img/k-match-screen-recording.gif)
+![Game demo](img/k-match-demo.gif)
